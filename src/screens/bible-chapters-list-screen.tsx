@@ -69,7 +69,6 @@ const BibleChaptersListScreen: React.FC<BibleChaptersListScreenProps> = ({
           <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
         </TouchableOpacity>
         <View style={styles.headerCenter}>
-          <Text style={styles.headerIcon}>{bookInfo.icon}</Text>
           <View>
             <Text style={styles.title}>{bookInfo.name}</Text>
             <Text style={styles.subtitle}>
@@ -95,7 +94,6 @@ const BibleChaptersListScreen: React.FC<BibleChaptersListScreenProps> = ({
               activeOpacity={0.7}
             >
               <Text style={styles.chapterNumber}>{chapterNumber}</Text>
-              <Text style={styles.chapterLabel}>Chapitre</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -123,21 +121,21 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   headerCenter: {
-    flexDirection: "row",
+    flex: 1,
     alignItems: "center",
-    gap: 12,
-  },
-  headerIcon: {
-    fontSize: 32,
+    justifyContent: "center",
   },
   title: {
-    fontSize: SIZES.large,
+    fontSize: SIZES.large + 2,
     fontWeight: "bold",
     color: COLORS.primary,
+    textAlign: "center",
   },
   subtitle: {
     fontSize: SIZES.small,
     color: COLORS.textLight,
+    textAlign: "center",
+    marginTop: 2,
   },
   placeholder: {
     width: 40,
@@ -151,30 +149,28 @@ const styles = StyleSheet.create({
   chaptersGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 12,
+    gap: 16,
+    justifyContent: "flex-start",
   },
   chapterCard: {
-    width: "22%",
+    width: "21%",
     aspectRatio: 1,
     backgroundColor: COLORS.white,
-    borderRadius: 12,
+    borderRadius: 16,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
     elevation: 3,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   chapterNumber: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: "bold",
     color: COLORS.primary,
-    marginBottom: 4,
-  },
-  chapterLabel: {
-    fontSize: SIZES.small,
-    color: COLORS.textLight,
   },
   errorContainer: {
     flex: 1,
