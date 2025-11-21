@@ -26,6 +26,14 @@ export type RootStackParamList = {
     verse: Verse
   }
   Search: undefined
+  BibleBooks: undefined
+  BibleChaptersList: {
+    bookIndex: number
+  }
+  BibleChapterReader: {
+    bookIndex: number
+    chapterNumber: number
+  }
 }
 // Navigation props for stack screens
 export type BibleReaderNavigationProp = NativeStackNavigationProp<
