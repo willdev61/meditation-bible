@@ -4,6 +4,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { RootStackParamList } from "../types/navigation"
 
 // Screens
+import SplashScreen from "../screens/splash-screen"
+import OnboardingScreen from "../screens/onboarding-screen"
 import HomeScreen from "../screens/home-screen"
 import BibleReaderScreen from "../screens/bible-reader-screen"
 import StrongDetailScreen from "../screens/strong-detail-screen"
@@ -16,12 +18,14 @@ const AppNavigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Splash"
         screenOptions={{
           headerShown: false,
           animation: "slide_from_right",
         }}
       >
+        <Stack.Screen name="Splash" component={SplashScreen} />
+        <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="BibleReader" component={BibleReaderScreen} />
         <Stack.Screen name="StrongDetail" component={StrongDetailScreen} />

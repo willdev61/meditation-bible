@@ -1,6 +1,6 @@
 import React from "react"
 import { Text, StyleSheet, TouchableOpacity } from "react-native"
-import { Verse } from "../types/bible"
+import { Verse } from "../types"
 import { COLORS, SIZES } from "../config/constants"
 
 interface VerseCardProps {

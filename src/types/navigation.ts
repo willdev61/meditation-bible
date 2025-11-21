@@ -1,8 +1,10 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RouteProp } from "@react-navigation/native"
-import { Verse } from "./bible"
+import { Verse } from "."
 
 export type RootStackParamList = {
+  Splash: undefined
+  Onboarding: undefined
   Home: undefined
   BibleReader: {
     book: string
@@ -17,7 +19,6 @@ export type RootStackParamList = {
   }
   Search: undefined
 }
-
 // Navigation props
 export type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,

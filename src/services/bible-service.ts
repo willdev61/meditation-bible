@@ -1,5 +1,5 @@
 import { DataSource, CURRENT_DATA_SOURCE } from "../config/constants"
-import { Verse, Book } from "../types/bible"
+import { Verse, Book } from "../types"
 import { StrongDefinition } from "../types/strong"
 import {
   getVerse as getMockVerse,

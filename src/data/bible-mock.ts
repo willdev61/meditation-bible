@@ -1,4 +1,4 @@
-import { BibleData, Book, Verse } from "../types/bible"
+import { BibleData, Book, Verse } from "../types"
 
 export const mockBible: BibleData = {
   books: [
