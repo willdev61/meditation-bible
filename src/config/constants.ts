@@ -1,20 +1,55 @@
+// 🎨 Palette "Quiet Nature" pour Selah
+// Mood : Papier ancien + Jardin tranquille + Lumière douce du matin
+
 export const COLORS = {
-  primary: "#1E3A5F", // Bleu royal profond (foi et divinité)
-  secondary: "#8B4513", // Brun selle (terre et humilité)
-  accent: "#9B5842", // Terre de Sienne brûlée (chaleur spirituelle)
-  background: "#F5F1E8", // Parchemin ancien
-  text: "#2C2416", // Brun très foncé (lisibilité optimale)
-  textLight: "#6B5D4F", // Brun moyen (texte secondaire)
-  white: "#FFFFFF",
-  error: "#8B2635", // Bordeaux profond
-  success: "#4A6741", // Vert olive (paix biblique)
-  cardBg: "#FDFBF7", // Crème parchemin
-  border: "#D4C5B0", // Bordure beige doré
-  shadow: "rgba(44, 36, 22, 0.15)", // Ombre marquée mais élégante
-  gold: "#B8860B", // Or sombre (royauté divine)
-  purple: "#6B3E7D", // Pourpre royal (sacerdoce)
-  darkBackground: "#2C2416", // Fond sombre alternatif
-  highlight: "#E8DCC8", // Surbrillance parchemin clair
+  // 🤍 Quiet Light - Bases claires
+  background: "#FFFEF9", // Fond principal de l'app
+  paper: "#FEFCF3", // Cards, conteneurs
+  offWhite: "#FAF8F3", // Sections alternatives
+  lightCream: "#F5F3ED", // Fond secondaire, surfaces
+
+  // 🌿 Nature - Verts & Terre
+  primary: "#8B9D83", // Sage - Couleur principale, boutons CTA
+  secondary: "#6B7F63", // Deep Sage - Hover, éléments actifs
+  olive: "#9CAF88", // Accents doux, badges
+  earth: "#B8997A", // Éléments chaleureux
+  clay: "#C4A588", // Tons terreux complémentaires
+  sand: "#E8DCC4", // Backgrounds très doux
+
+  // ✨ Accents - Or & Chaleur
+  gold: "#C9A961", // Highlights, Strong's, éléments premium
+  amber: "#D4B483", // Accents dorés doux
+  warmGray: "#9B8F7E", // Séparateurs, bordures subtiles
+
+  // 📝 Texte
+  text: "#3E4035", // Texte principal (titres, corps)
+  textMedium: "#6B6F5F", // Texte secondaire
+  textLight: "#9B9F8F", // Placeholders, légendes
+
+  // 🎯 Fonctionnels
+  white: "#FFFFFF", // Blanc pur (icônes, texte sur fond foncé)
+  success: "#7A9B76", // Messages de succès, validations
+  error: "#C17B6F", // Erreurs, alertes
+  warning: "#D4A574", // Avertissements
+
+  // 🌫️ Overlays & Ombres
+  shadowLight: "rgba(62, 64, 53, 0.06)", // Ombres douces
+  shadowMedium: "rgba(62, 64, 53, 0.12)", // Ombres marquées
+  overlay: "rgba(139, 157, 131, 0.15)", // Voiles, modals
+  border: "rgba(139, 157, 131, 0.15)", // Bordures subtiles
+
+  // 🎨 Gradients (pour usage dans styles inline)
+  gradientSage: ["#9CAF88", "#8B9D83"], // Boutons principaux
+  gradientWarm: ["#FFFEF9", "#F5F3ED"], // Headers, sections
+  gradientEarth: ["#E8DCC4", "#C4A588"], // Cards spéciales
+  gradientGold: ["#D4B483", "#C9A961"], // Highlights premium
+
+  // Compatibilité
+  cardBg: "#FEFCF3", // Paper
+  accent: "#C9A961", // Gold
+  highlight: "#E8DCC4", // Sand
+  shadow: "rgba(62, 64, 53, 0.06)", // Shadow Light
+  darkBackground: "#3E4035", // Text Dark
 } as const
 
 export const FONTS = {

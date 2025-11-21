@@ -24,27 +24,31 @@ const VerseCard: React.FC<VerseCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.paper, // Paper au lieu de blanc pur
     borderRadius: SIZES.radius,
-    padding: SIZES.padding,
+    padding: SIZES.padding * 1.2,
     marginVertical: 8,
     marginHorizontal: SIZES.padding,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: COLORS.border, // Bordure subtile
+    shadowColor: COLORS.text,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06, // Ombre douce
+    shadowRadius: 3,
+    elevation: 2,
   },
   reference: {
     fontSize: SIZES.small,
     fontWeight: "600",
-    color: COLORS.secondary,
+    color: COLORS.primary, // Sage pour les références
     marginBottom: 8,
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
   },
   text: {
     fontSize: SIZES.medium,
     color: COLORS.text,
-    lineHeight: 24,
+    lineHeight: 26,
   },
 })
 

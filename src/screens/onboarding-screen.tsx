@@ -27,7 +27,7 @@ const slides: OnboardingSlide[] = [
     description:
       "Explorez chaque verset avec sa signification originale en hébreu et grec grâce à la concordance Strong's.",
     icon: "📖",
-    backgroundColor: "#F5F1E8", // Parchemin ancien
+    backgroundColor: COLORS.background, // Background - Quiet Light
   },
   {
     id: "2",
@@ -35,7 +35,7 @@ const slides: OnboardingSlide[] = [
     description:
       "Des outils de méditation guidée, un journal spirituel et des questions de réflexion pour transformer votre lecture.",
     icon: "🙏",
-    backgroundColor: "#E8DCC8", // Parchemin clair
+    backgroundColor: COLORS.sand, // Sand - Earth tone
   },
   {
     id: "3",
@@ -43,7 +43,7 @@ const slides: OnboardingSlide[] = [
     description:
       "Suivez votre progression, créez des plans de lecture et construisez une habitude spirituelle durable.",
     icon: "🌱",
-    backgroundColor: "#FDFBF7", // Crème parchemin
+    backgroundColor: COLORS.lightCream, // Light Cream - Fond secondaire
   },
 ]
 
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   dot: {
     height: 10,
     borderRadius: 5,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.primary, // Sage pour cohérence
   },
   nextButton: {
     backgroundColor: COLORS.primary,
@@ -231,11 +231,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderRadius: 12,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowColor: COLORS.text,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 4,
   },
   nextButtonText: {
     color: COLORS.white,

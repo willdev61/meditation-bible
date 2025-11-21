@@ -48,15 +48,17 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   strongWord: {
-    color: COLORS.primary,
+    color: COLORS.gold, // Or pour les mots Strong's (highlights premium)
     fontWeight: "600",
     textDecorationLine: "underline",
-    textDecorationColor: COLORS.primary,
+    textDecorationStyle: "dotted",
+    textDecorationColor: COLORS.gold,
   },
   highlighted: {
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.sand, // Sand pour highlight doux
     borderRadius: 4,
-    paddingHorizontal: 2,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
   },
 })
 
