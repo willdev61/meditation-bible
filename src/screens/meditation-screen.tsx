@@ -156,7 +156,7 @@ const MeditationScreen: React.FC<MeditationScreenProps> = ({
                 alert("Fonctionnalité de partage à venir !")
               }}
             >
-              <Ionicons name="share-outline" size={24} color={COLORS.primary} />
+              <Ionicons name="share-outline" size={24} color={COLORS.text} />
               <Text
                 style={[styles.actionButtonText, styles.secondaryButtonText]}
               >
@@ -168,7 +168,7 @@ const MeditationScreen: React.FC<MeditationScreenProps> = ({
           {/* Conseils de méditation */}
           <View style={styles.tipsCard}>
             <View style={styles.tipsHeader}>
-              <Ionicons name="bulb" size={20} color={COLORS.secondary} />
+              <Ionicons name="bulb" size={20} color={COLORS.earth} />
               <Text style={styles.tipsTitle}>Conseils pour méditer</Text>
             </View>
             <Text style={styles.tipsText}>
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: SIZES.padding,
     paddingVertical: 12,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
@@ -216,30 +216,47 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   verseCard: {
-    backgroundColor: COLORS.primary,
-    borderRadius: SIZES.radius,
-    padding: SIZES.padding * 1.5,
+    backgroundColor: COLORS.sand, // Sand pour un fond doux et chaleureux
+    borderRadius: SIZES.radius + 4,
+    padding: SIZES.padding * 2,
     margin: SIZES.padding,
     marginBottom: SIZES.padding / 2,
+    borderWidth: 1,
+    borderColor: COLORS.clay, // Clay pour une bordure chaude
+    shadowColor: COLORS.text,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   verseReference: {
     fontSize: SIZES.medium,
-    color: COLORS.secondary,
+    color: COLORS.primary,
     fontWeight: "600",
     marginBottom: 12,
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
   },
   verseText: {
     fontSize: SIZES.large,
-    color: COLORS.white,
+    color: COLORS.text,
     lineHeight: 28,
+    fontWeight: "500",
   },
   card: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.paper,
     borderRadius: SIZES.radius,
     padding: SIZES.padding * 1.5,
     margin: SIZES.padding,
     marginTop: SIZES.padding / 2,
     marginBottom: SIZES.padding / 2,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    shadowColor: COLORS.text,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
+    elevation: 2,
   },
   timerToggle: {
     flexDirection: "row",
@@ -272,7 +289,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: COLORS.accent,
+    backgroundColor: COLORS.olive, // Olive pour un accent doux
     justifyContent: "center",
     alignItems: "center",
   },
@@ -325,15 +342,15 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   secondaryButton: {
-    backgroundColor: COLORS.white,
-    borderWidth: 2,
-    borderColor: COLORS.primary,
+    backgroundColor: COLORS.paper,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   secondaryButtonText: {
-    color: COLORS.primary,
+    color: COLORS.text,
   },
   tipsCard: {
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.lightCream, // Light Cream pour fond secondaire doux
     borderRadius: SIZES.radius,
     padding: SIZES.padding * 1.5,
     margin: SIZES.padding,
@@ -351,7 +368,7 @@ const styles = StyleSheet.create({
   tipsTitle: {
     fontSize: SIZES.medium,
     fontWeight: "600",
-    color: COLORS.secondary,
+    color: COLORS.earth, // Earth pour chaleur
   },
   tipsText: {
     fontSize: SIZES.medium,
