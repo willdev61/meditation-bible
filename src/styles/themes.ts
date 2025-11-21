@@ -9,7 +9,7 @@ export const globalStyles = StyleSheet.create({
 
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.background,
   },
 
   centered: {
@@ -21,7 +21,7 @@ export const globalStyles = StyleSheet.create({
   title: {
     fontSize: SIZES.title,
     fontWeight: "bold",
-    color: COLORS.primary,
+    color: COLORS.text,
     marginBottom: 10,
   },
 
@@ -39,16 +39,18 @@ export const globalStyles = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cardBg,
     borderRadius: SIZES.radius,
     padding: SIZES.padding,
     marginVertical: 8,
     marginHorizontal: SIZES.padding,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 2,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
 
   button: {
