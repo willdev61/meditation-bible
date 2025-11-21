@@ -11,11 +11,11 @@ import SplashScreen from "../screens/splash-screen"
 import OnboardingScreen from "../screens/onboarding-screen"
 import HomeScreen from "../screens/home-screen"
 import BibleScreen from "../screens/bible-screen"
+import SearchScreen from "../screens/search-screen"
 import MeditationTabScreen from "../screens/meditation-tab-screen"
 import BibleReaderScreen from "../screens/bible-reader-screen"
 import StrongDetailScreen from "../screens/strong-detail-screen"
 import MeditationScreen from "../screens/meditation-screen"
-import SearchScreen from "../screens/search-screen"
 import BibleBooksScreen from "../screens/bible-books-screen"
 import BibleChaptersListScreen from "../screens/bible-chapters-list-screen"
 import BibleChapterReaderScreen from "../screens/bible-chapter-reader-screen"
@@ -36,8 +36,10 @@ const MainTabNavigator: React.FC = () => {
             iconName = focused ? "home" : "home-outline"
           } else if (route.name === "BibleTab") {
             iconName = focused ? "book" : "book-outline"
+          } else if (route.name === "StrongTab") {
+            iconName = focused ? "language" : "language-outline"
           } else if (route.name === "MeditationTab") {
-            iconName = focused ? "heart" : "heart-outline"
+            iconName = focused ? "leaf" : "leaf-outline"
           } else {
             iconName = "help-outline"
           }
@@ -55,7 +57,7 @@ const MainTabNavigator: React.FC = () => {
           height: 60,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: "600",
         },
       })}
@@ -71,9 +73,14 @@ const MainTabNavigator: React.FC = () => {
         options={{ tabBarLabel: "Bible" }}
       />
       <Tab.Screen
+        name="StrongTab"
+        component={SearchScreen}
+        options={{ tabBarLabel: "Strong's" }}
+      />
+      <Tab.Screen
         name="MeditationTab"
         component={MeditationTabScreen}
-        options={{ tabBarLabel: "Méditation" }}
+        options={{ tabBarLabel: "Méditer" }}
       />
     </Tab.Navigator>
   )

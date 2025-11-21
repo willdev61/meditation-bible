@@ -59,11 +59,11 @@ export const FONTS = {
 } as const
 
 export const SIZES = {
-  small: 12,
-  medium: 16,
-  large: 20,
-  xlarge: 24,
-  title: 32,
+  small: 11,
+  medium: 14,
+  large: 17,
+  xlarge: 20,
+  title: 26,
   radius: 12,
   padding: 16,
 } as const

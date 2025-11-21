@@ -6,8 +6,8 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
-  SafeAreaView,
 } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "../types/navigation"
@@ -160,18 +160,12 @@ const SearchScreen: React.FC<SearchScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Recherche Strong's</Text>
-          <View style={styles.placeholder} />
+          <Text style={styles.headerTitle}>Concordance Strong's</Text>
+          <Text style={styles.headerSubtitle}>Hébreu & Grec</Text>
         </View>
 
         {/* Search Bar */}
@@ -225,40 +219,40 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: SIZES.padding,
-    paddingVertical: 12,
-    backgroundColor: COLORS.white,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-  },
-  backButton: {
-    padding: 8,
+    paddingHorizontal: SIZES.padding * 1.5,
+    paddingTop: SIZES.padding,
+    paddingBottom: SIZES.padding * 1.5,
+    backgroundColor: COLORS.background,
   },
   headerTitle: {
-    fontSize: SIZES.large,
-    fontWeight: "600",
-    color: COLORS.primary,
+    fontSize: SIZES.title,
+    fontWeight: "700",
+    color: COLORS.text,
+    marginBottom: 4,
+    letterSpacing: 0.3,
   },
-  placeholder: {
-    width: 40,
+  headerSubtitle: {
+    fontSize: SIZES.medium,
+    color: COLORS.textMedium,
+    fontStyle: "italic",
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.white,
-    margin: SIZES.padding,
+    backgroundColor: COLORS.paper,
+    marginHorizontal: SIZES.padding * 1.5,
+    marginBottom: SIZES.padding,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: SIZES.radius,
     gap: 12,
-    shadowColor: "#000",
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    shadowColor: COLORS.text,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.06,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 2,
   },
   searchInput: {
     flex: 1,
@@ -269,16 +263,18 @@ const styles = StyleSheet.create({
     paddingBottom: SIZES.padding * 2,
   },
   resultItem: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.paper,
     borderRadius: SIZES.radius,
     padding: SIZES.padding,
-    marginHorizontal: SIZES.padding,
+    marginHorizontal: SIZES.padding * 1.5,
     marginBottom: 12,
-    shadowColor: "#000",
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    shadowColor: COLORS.text,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.06,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 2,
   },
   resultHeader: {
     flexDirection: "row",
@@ -366,16 +362,18 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   exampleTag: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.gold,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     marginBottom: 8,
+    borderWidth: 1,
+    borderColor: COLORS.amber,
   },
   exampleText: {
     color: COLORS.white,
     fontSize: SIZES.medium,
-    fontWeight: "500",
+    fontWeight: "600",
   },
 })
 

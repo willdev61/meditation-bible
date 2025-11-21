@@ -5,14 +5,17 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
+  TextInput,
 } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import { CompositeNavigationProp } from "@react-navigation/native"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { Verse } from "../types"
 import bibleService from "../services/bible-service"
+import MeditationTimer from "../components/meditation-timer"
+import LoadingSpinner from "../components/loading-spinner"
 import { COLORS, SIZES } from "../config/constants"
 import { RootStackParamList, TabParamList } from "../types/navigation"
 
@@ -28,131 +31,238 @@ type MeditationTabScreenProps = {
 const MeditationTabScreen: React.FC<MeditationTabScreenProps> = ({
   navigation,
 }) => {
-  const [suggestedVerses, setSuggestedVerses] = useState<Verse[]>([])
+  const [verseOfTheDay, setVerseOfTheDay] = useState<Verse | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [notes, setNotes] = useState("")
+  const [showTimer, setShowTimer] = useState(false)
 
   useEffect(() => {
-    loadSuggestedVerses()
+    loadVerseOfTheDay()
   }, [])
 
-  const loadSuggestedVerses = async () => {
+  const loadVerseOfTheDay = async () => {
+    setLoading(true)
     try {
-      // Charger quelques versets suggérés pour la méditation
-      const verses: Verse[] = []
-      const verse1 = await bibleService.getVerse("jean", 3, 16)
-      const verse2 = await bibleService.getVerse("psaume", 23, 1)
-      const verse3 = await bibleService.getVerse("jean", 1, 1)
+      let randomVerse = await bibleService.getRandomVerse()
 
-      if (verse1) verses.push(verse1)
-      if (verse2) verses.push(verse2)
-      if (verse3) verses.push(verse3)
+      // Si la base de données est vide, utiliser un verset par défaut
+      if (!randomVerse) {
+        console.log("📖 Base de données vide, utilisation d'un verset par défaut")
+        randomVerse = await bibleService.getVerse("jean", 3, 16)
+      }
 
-      setSuggestedVerses(verses)
+      setVerseOfTheDay(randomVerse)
     } catch (error) {
-      console.error("Error loading suggested verses:", error)
+      console.error("❌ Error loading verse of the day:", error)
+      // En cas d'erreur, essayer de charger un verset par défaut
+      try {
+        const fallbackVerse = await bibleService.getVerse("jean", 3, 16)
+        setVerseOfTheDay(fallbackVerse)
+      } catch (fallbackError) {
+        console.error("❌ Fallback verse also failed:", fallbackError)
+      }
+    } finally {
+      setLoading(false)
     }
   }
 
+  const reflectionQuestions = [
+    "Que me révèle ce verset sur Dieu ?",
+    "Comment puis-je appliquer cette vérité dans ma vie ?",
+    "Y a-t-il une promesse à saisir ou un commandement à obéir ?",
+    "Qu'est-ce que ce passage m'apprend sur moi-même ?",
+  ]
+
+  const handleSaveNotes = () => {
+    // TODO: Implémenter la sauvegarde des notes
+    console.log("Notes sauvegardées:", notes)
+    alert("Notes sauvegardées avec succès !")
+  }
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
+  if (!verseOfTheDay) {
+    return (
+      <SafeAreaView style={styles.safeArea} edges={["top"]}>
+        <View style={styles.errorContainer}>
+          <Ionicons name="alert-circle" size={64} color={COLORS.textLight} />
+          <Text style={styles.errorText}>
+            Impossible de charger le verset du jour
+          </Text>
+          <TouchableOpacity
+            style={styles.retryButton}
+            onPress={loadVerseOfTheDay}
+          >
+            <Text style={styles.retryButtonText}>Réessayer</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    )
+  }
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Méditation</Text>
-      </View>
-
-      <ScrollView style={styles.container}>
-        {/* Introduction */}
-        <View style={styles.introCard}>
-          <Ionicons name="heart" size={48} color={COLORS.accent} />
-          <Text style={styles.introTitle}>
-            Approfondissez votre foi
-          </Text>
-          <Text style={styles.introText}>
-            Prenez un moment pour méditer sur la Parole de Dieu. Laissez l'Esprit Saint vous parler à travers les Écritures.
-          </Text>
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.headerTitle}>Méditation guidée</Text>
+            <Text style={styles.headerSubtitle}>Prenez un moment avec Dieu</Text>
+          </View>
+          <TouchableOpacity
+            onPress={loadVerseOfTheDay}
+            style={styles.refreshButton}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="refresh" size={20} color={COLORS.primary} />
+          </TouchableOpacity>
         </View>
 
-        {/* Versets suggérés */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Versets suggérés</Text>
-          {suggestedVerses.map((verse, index) => (
-            <TouchableOpacity
-              key={`${verse.book}-${verse.chapter}-${verse.verse}`}
-              style={styles.verseCard}
-              onPress={() => navigation.navigate("Meditation", { verse })}
-              activeOpacity={0.7}
-            >
-              <View style={styles.verseHeader}>
-                <Text style={styles.verseReference}>{verse.reference}</Text>
-                <Ionicons
-                  name="chevron-forward"
-                  size={20}
-                  color={COLORS.textLight}
-                />
-              </View>
-              <Text style={styles.verseText} numberOfLines={3}>
-                {verse.text}
-              </Text>
-              <View style={styles.meditateButton}>
-                <Ionicons name="heart-outline" size={16} color={COLORS.accent} />
-                <Text style={styles.meditateButtonText}>Méditer</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* Guide de méditation */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Comment méditer ?</Text>
-          <View style={styles.guideCard}>
-            <View style={styles.guideStep}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>1</Text>
-              </View>
-              <View style={styles.stepContent}>
-                <Text style={styles.stepTitle}>Lire</Text>
-                <Text style={styles.stepText}>
-                  Lisez le verset plusieurs fois, lentement et attentivement
-                </Text>
-              </View>
+        <ScrollView
+          style={styles.content}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Verset du jour */}
+          <View style={styles.verseCard}>
+            <View style={styles.verseHeader}>
+              <Ionicons name="sparkles" size={14} color={COLORS.gold} />
+              <Text style={styles.verseLabel}>Verset du jour</Text>
             </View>
-
-            <View style={styles.guideStep}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>2</Text>
+            <Text style={styles.verseReference}>{verseOfTheDay.reference}</Text>
+            <View style={styles.verseQuoteContainer}>
+              <View style={styles.quoteMarkLeft}>
+                <Text style={styles.quoteMark}>"</Text>
               </View>
-              <View style={styles.stepContent}>
-                <Text style={styles.stepTitle}>Réfléchir</Text>
-                <Text style={styles.stepText}>
-                  Demandez-vous ce que Dieu vous dit à travers ce passage
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.guideStep}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>3</Text>
-              </View>
-              <View style={styles.stepContent}>
-                <Text style={styles.stepTitle}>Prier</Text>
-                <Text style={styles.stepText}>
-                  Parlez à Dieu de ce que vous avez découvert
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.guideStep}>
-              <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>4</Text>
-              </View>
-              <View style={styles.stepContent}>
-                <Text style={styles.stepTitle}>Appliquer</Text>
-                <Text style={styles.stepText}>
-                  Pensez à comment mettre en pratique ce que vous avez appris
-                </Text>
+              <Text style={styles.verseText}>{verseOfTheDay.text}</Text>
+              <View style={styles.quoteMarkRight}>
+                <Text style={styles.quoteMark}>"</Text>
               </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
+
+          {/* Timer de méditation */}
+          <View style={styles.card}>
+            <TouchableOpacity
+              style={styles.timerToggle}
+              onPress={() => setShowTimer(!showTimer)}
+              activeOpacity={0.7}
+            >
+              <View style={styles.timerToggleLeft}>
+                <Ionicons
+                  name="timer"
+                  size={22}
+                  color={COLORS.primary}
+                />
+                <Text style={styles.timerToggleText}>
+                  {showTimer ? "Masquer" : "Afficher"} le minuteur
+                </Text>
+              </View>
+              <Ionicons
+                name={showTimer ? "chevron-up" : "chevron-down"}
+                size={22}
+                color={COLORS.textLight}
+              />
+            </TouchableOpacity>
+
+            {showTimer && (
+              <MeditationTimer
+                initialMinutes={5}
+                onComplete={() => alert("Temps de méditation terminé !")}
+              />
+            )}
+          </View>
+
+          {/* Questions de réflexion */}
+          <View style={styles.card}>
+            <View style={styles.sectionHeader}>
+              <Ionicons name="help-circle" size={20} color={COLORS.primary} />
+              <Text style={styles.sectionTitle}>Questions de réflexion</Text>
+            </View>
+            {reflectionQuestions.map((question, index) => (
+              <View key={index} style={styles.questionItem}>
+                <View style={styles.questionNumber}>
+                  <Text style={styles.questionNumberText}>{index + 1}</Text>
+                </View>
+                <Text style={styles.questionText}>{question}</Text>
+              </View>
+            ))}
+          </View>
+
+          {/* Zone de notes */}
+          <View style={styles.card}>
+            <View style={styles.sectionHeader}>
+              <Ionicons
+                name="create"
+                size={20}
+                color={COLORS.primary}
+              />
+              <Text style={styles.sectionTitle}>Mes notes et réflexions</Text>
+            </View>
+            <TextInput
+              style={styles.notesInput}
+              placeholder="Écrivez vos pensées, prières, ou insights..."
+              placeholderTextColor={COLORS.textLight}
+              multiline
+              numberOfLines={10}
+              value={notes}
+              onChangeText={setNotes}
+              textAlignVertical="top"
+            />
+            <Text style={styles.characterCount}>{notes.length} caractères</Text>
+          </View>
+
+          {/* Actions */}
+          <View style={styles.actionsContainer}>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={handleSaveNotes}
+              activeOpacity={0.8}
+            >
+              <Ionicons
+                name="checkmark-circle"
+                size={20}
+                color={COLORS.white}
+              />
+              <Text style={styles.actionButtonText}>Sauvegarder</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.actionButton, styles.secondaryButton]}
+              onPress={() => {
+                alert("Fonctionnalité de partage à venir !")
+              }}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="share-outline" size={20} color={COLORS.primary} />
+              <Text
+                style={[styles.actionButtonText, styles.secondaryButtonText]}
+              >
+                Partager
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Conseils de méditation */}
+          <View style={styles.tipsCard}>
+            <View style={styles.tipsHeader}>
+              <Ionicons name="bulb" size={20} color={COLORS.earth} />
+              <Text style={styles.tipsTitle}>Conseils pour méditer</Text>
+            </View>
+            <Text style={styles.tipsText}>
+              • Trouvez un endroit calme{"\n"}
+              • Lisez le verset plusieurs fois lentement{"\n"}
+              • Priez avant de commencer{"\n"}
+              • Notez ce qui vous interpelle{"\n"}
+              • Demandez à Dieu de vous parler
+            </Text>
+          </View>
+
+          {/* Espace en bas */}
+          <View style={{ height: SIZES.padding * 3 }} />
+        </ScrollView>
+      </View>
     </SafeAreaView>
   )
 }
@@ -162,148 +272,269 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
+  container: {
+    flex: 1,
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: SIZES.padding * 2,
-    paddingVertical: SIZES.padding,
+    paddingHorizontal: SIZES.padding * 1.5,
+    paddingTop: SIZES.padding,
+    paddingBottom: SIZES.padding * 1.5,
     backgroundColor: COLORS.background,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
   },
-  title: {
+  headerTitle: {
     fontSize: SIZES.title,
-    fontWeight: "bold",
+    fontWeight: "700",
     color: COLORS.text,
+    marginBottom: 4,
+    letterSpacing: 0.3,
   },
-  container: {
+  headerSubtitle: {
+    fontSize: SIZES.medium,
+    color: COLORS.textMedium,
+    fontStyle: "italic",
+  },
+  refreshButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.sand,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  content: {
     flex: 1,
   },
-  introCard: {
-    backgroundColor: COLORS.cardBg,
-    borderRadius: SIZES.radius,
-    padding: SIZES.padding * 2,
-    margin: SIZES.padding * 2,
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 2,
-    elevation: 1,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    padding: SIZES.padding * 2,
   },
-  introTitle: {
+  errorText: {
     fontSize: SIZES.large,
-    fontWeight: "bold",
-    color: COLORS.text,
-    marginTop: 12,
-    marginBottom: 8,
-  },
-  introText: {
-    fontSize: SIZES.medium,
-    color: COLORS.textLight,
+    color: COLORS.textMedium,
     textAlign: "center",
-    lineHeight: 22,
-  },
-  section: {
+    marginTop: SIZES.padding,
     marginBottom: SIZES.padding * 2,
   },
-  sectionTitle: {
-    fontSize: SIZES.large,
-    fontWeight: "bold",
-    color: COLORS.text,
-    marginHorizontal: SIZES.padding * 2,
-    marginBottom: SIZES.padding,
+  retryButton: {
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: SIZES.padding * 2,
+    paddingVertical: SIZES.padding,
+    borderRadius: SIZES.radius,
+  },
+  retryButtonText: {
+    color: COLORS.white,
+    fontSize: SIZES.medium,
+    fontWeight: "600",
   },
   verseCard: {
-    backgroundColor: COLORS.cardBg,
-    borderRadius: SIZES.radius,
+    backgroundColor: COLORS.sand,
+    borderRadius: SIZES.radius + 4,
     padding: SIZES.padding * 1.5,
-    marginHorizontal: SIZES.padding * 2,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 2,
-    elevation: 1,
+    marginHorizontal: SIZES.padding * 1.5,
+    marginBottom: SIZES.padding,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.clay,
+    shadowColor: COLORS.text,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   verseHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    gap: 6,
     marginBottom: 8,
   },
+  verseLabel: {
+    fontSize: SIZES.small,
+    color: COLORS.gold,
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+  },
   verseReference: {
+    fontSize: SIZES.large,
+    color: COLORS.text,
+    fontWeight: "700",
+    marginBottom: SIZES.padding,
+    letterSpacing: 0.5,
+  },
+  verseQuoteContainer: {
+    position: "relative",
+    paddingVertical: SIZES.padding * 0.5,
+  },
+  quoteMarkLeft: {
+    position: "absolute",
+    top: -8,
+    left: -4,
+  },
+  quoteMarkRight: {
+    position: "absolute",
+    bottom: -20,
+    right: -4,
+  },
+  quoteMark: {
+    fontSize: 48,
+    color: COLORS.clay,
+    fontWeight: "700",
+    lineHeight: 48,
+    opacity: 0.3,
+  },
+  verseText: {
+    fontSize: SIZES.large,
+    color: COLORS.text,
+    lineHeight: 28,
+    paddingHorizontal: 12,
+    fontWeight: "500",
+  },
+  card: {
+    backgroundColor: COLORS.paper,
+    borderRadius: SIZES.radius,
+    padding: SIZES.padding * 1.5,
+    marginHorizontal: SIZES.padding * 1.5,
+    marginBottom: SIZES.padding,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    shadowColor: COLORS.text,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  timerToggle: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  timerToggleLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  timerToggleText: {
     fontSize: SIZES.medium,
+    color: COLORS.text,
+    fontWeight: "500",
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: SIZES.large,
     fontWeight: "600",
     color: COLORS.text,
   },
-  verseText: {
+  questionItem: {
+    flexDirection: "row",
+    marginBottom: 16,
+    gap: 12,
+  },
+  questionNumber: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: COLORS.olive,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  questionNumberText: {
+    color: COLORS.white,
+    fontSize: SIZES.small,
+    fontWeight: "600",
+  },
+  questionText: {
+    flex: 1,
     fontSize: SIZES.medium,
     color: COLORS.text,
     lineHeight: 22,
-    marginBottom: 12,
   },
-  meditateButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-  },
-  meditateButtonText: {
-    fontSize: SIZES.small,
-    fontWeight: "600",
-    color: COLORS.accent,
-  },
-  guideCard: {
-    backgroundColor: COLORS.cardBg,
-    borderRadius: SIZES.radius,
-    padding: SIZES.padding * 1.5,
-    marginHorizontal: SIZES.padding * 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 2,
-    elevation: 1,
+  notesInput: {
+    backgroundColor: COLORS.background,
+    borderRadius: SIZES.radius - 4,
+    padding: 12,
+    fontSize: SIZES.medium,
+    color: COLORS.text,
+    minHeight: 150,
     borderWidth: 1,
     borderColor: COLORS.border,
   },
-  guideStep: {
-    flexDirection: "row",
-    marginBottom: SIZES.padding * 1.5,
-  },
-  stepNumber: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: COLORS.secondary,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 12,
-    borderWidth: 2,
-    borderColor: COLORS.border,
-  },
-  stepNumberText: {
-    fontSize: SIZES.medium,
-    fontWeight: "bold",
-    color: COLORS.text,
-  },
-  stepContent: {
-    flex: 1,
-  },
-  stepTitle: {
-    fontSize: SIZES.medium,
-    fontWeight: "600",
-    color: COLORS.text,
-    marginBottom: 4,
-  },
-  stepText: {
+  characterCount: {
     fontSize: SIZES.small,
     color: COLORS.textLight,
-    lineHeight: 18,
+    textAlign: "right",
+    marginTop: 8,
+  },
+  actionsContainer: {
+    flexDirection: "row",
+    paddingHorizontal: SIZES.padding * 1.5,
+    marginBottom: SIZES.padding,
+    gap: 12,
+  },
+  actionButton: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: COLORS.primary,
+    paddingVertical: 14,
+    borderRadius: SIZES.radius,
+    gap: 8,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  actionButtonText: {
+    color: COLORS.white,
+    fontSize: SIZES.medium,
+    fontWeight: "600",
+  },
+  secondaryButton: {
+    backgroundColor: COLORS.paper,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    shadowColor: COLORS.text,
+    shadowOpacity: 0.06,
+  },
+  secondaryButtonText: {
+    color: COLORS.primary,
+  },
+  tipsCard: {
+    backgroundColor: COLORS.lightCream,
+    borderRadius: SIZES.radius,
+    padding: SIZES.padding * 1.5,
+    marginHorizontal: SIZES.padding * 1.5,
+    marginBottom: SIZES.padding,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  tipsHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 12,
+  },
+  tipsTitle: {
+    fontSize: SIZES.medium,
+    fontWeight: "600",
+    color: COLORS.earth,
+  },
+  tipsText: {
+    fontSize: SIZES.medium,
+    color: COLORS.text,
+    lineHeight: 24,
   },
 })
 

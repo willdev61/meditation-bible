@@ -6,6 +6,7 @@ import { Verse } from "."
 export type TabParamList = {
   AccueilTab: undefined
   BibleTab: undefined
+  StrongTab: undefined
   MeditationTab: undefined
 }
 
