@@ -77,7 +77,11 @@ const BibleScreen: React.FC<BibleScreenProps> = ({ navigation }) => {
                   },
                 ]}
               >
-                <Ionicons name="book" size={24} color={COLORS.white} />
+                <Ionicons
+                  name="book"
+                  size={24}
+                  color={testament === "AT" ? COLORS.accent : COLORS.primary}
+                />
               </View>
               <Text style={styles.bookName}>{book.name}</Text>
               <Text style={styles.bookChapters}>
@@ -98,6 +102,12 @@ const BibleScreen: React.FC<BibleScreenProps> = ({ navigation }) => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
         <Text style={styles.title}>La Bible</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Search")}
+          style={styles.searchButton}
+        >
+          <Ionicons name="search" size={24} color={COLORS.textLight} />
+        </TouchableOpacity>
         <View style={styles.headerActions}>
           <TouchableOpacity
             onPress={() => navigation.navigate("BibleBooks")}
@@ -167,14 +177,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: SIZES.padding * 2,
     paddingVertical: SIZES.padding,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
   title: {
     fontSize: SIZES.title,
     fontWeight: "bold",
-    color: COLORS.primary,
+    color: COLORS.text,
   },
   headerActions: {
     flexDirection: "row",
@@ -192,7 +202,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.secondary,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -280,16 +290,18 @@ const styles = StyleSheet.create({
   },
   bookCard: {
     width: "47%",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cardBg,
     borderRadius: SIZES.radius,
     padding: SIZES.padding,
     margin: "1.5%",
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 2,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   bookIconContainer: {
     width: 48,
@@ -298,6 +310,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 8,
+    opacity: 0.15,
   },
   bookName: {
     fontSize: SIZES.medium,

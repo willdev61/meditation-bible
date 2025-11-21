@@ -94,14 +94,14 @@ const BibleReaderScreen: React.FC<BibleReaderScreenProps> = ({
             onPress={() => navigation.goBack()}
             style={styles.backButton}
           >
-            <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
+            <Ionicons name="arrow-back" size={24} color={COLORS.text} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{verse.reference}</Text>
           <TouchableOpacity style={styles.menuButton}>
             <Ionicons
               name="ellipsis-vertical"
               size={24}
-              color={COLORS.primary}
+              color={COLORS.textLight}
             />
           </TouchableOpacity>
         </View>
@@ -147,7 +147,7 @@ const BibleReaderScreen: React.FC<BibleReaderScreenProps> = ({
               <Ionicons
                 name="bookmark-outline"
                 size={24}
-                color={COLORS.primary}
+                color={COLORS.text}
               />
               <Text
                 style={[styles.actionButtonText, styles.secondaryButtonText]}
@@ -165,7 +165,7 @@ const BibleReaderScreen: React.FC<BibleReaderScreenProps> = ({
                 // TODO: Implémenter navigation verset précédent
               }}
             >
-              <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
+              <Ionicons name="chevron-back" size={24} color={COLORS.text} />
               <Text style={styles.navButtonText}>Précédent</Text>
             </TouchableOpacity>
 
@@ -179,7 +179,7 @@ const BibleReaderScreen: React.FC<BibleReaderScreenProps> = ({
               <Ionicons
                 name="chevron-forward"
                 size={24}
-                color={COLORS.primary}
+                color={COLORS.text}
               />
             </TouchableOpacity>
           </View>
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: SIZES.padding,
     paddingVertical: 12,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: SIZES.large,
     fontWeight: "600",
-    color: COLORS.primary,
+    color: COLORS.text,
   },
   menuButton: {
     padding: 8,
@@ -222,15 +222,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   verseContainer: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cardBg,
     borderRadius: SIZES.radius,
     padding: SIZES.padding * 1.5,
     margin: SIZES.padding,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 2,
+    elevation: 1,
   },
   verseReference: {
     fontSize: SIZES.large,
     fontWeight: "600",
-    color: COLORS.secondary,
+    color: COLORS.primary,
     marginBottom: 16,
   },
   verseTextContainer: {
@@ -266,12 +273,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   secondaryButton: {
-    backgroundColor: COLORS.white,
-    borderWidth: 2,
-    borderColor: COLORS.primary,
+    backgroundColor: COLORS.cardBg,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   secondaryButtonText: {
-    color: COLORS.primary,
+    color: COLORS.text,
   },
   navigationContainer: {
     flexDirection: "row",
@@ -282,14 +289,16 @@ const styles = StyleSheet.create({
   navButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cardBg,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
     gap: 4,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   navButtonText: {
-    color: COLORS.primary,
+    color: COLORS.text,
     fontSize: SIZES.medium,
     fontWeight: "600",
   },

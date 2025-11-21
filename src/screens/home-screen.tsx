@@ -103,7 +103,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                 onPress={loadVerseOfTheDay}
                 style={styles.refreshButton}
               >
-                <Ionicons name="refresh" size={20} color={COLORS.secondary} />
+                <Ionicons name="refresh" size={20} color={COLORS.textLight} />
               </TouchableOpacity>
             </View>
             <Text style={styles.verseReference}>{verseOfTheDay.reference}</Text>
@@ -139,7 +139,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                 <Ionicons
                   name={item.icon as any}
                   size={32}
-                  color={COLORS.white}
+                  color={item.color}
                 />
               </View>
               <View style={styles.menuTextContainer}>
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: SIZES.title,
     fontWeight: "bold",
-    color: COLORS.primary,
+    color: COLORS.text,
     marginBottom: 4,
   },
   subtitle: {
@@ -200,11 +200,18 @@ const styles = StyleSheet.create({
     color: COLORS.textLight,
   },
   verseCard: {
-    backgroundColor: COLORS.primary,
-    borderRadius: SIZES.radius,
+    backgroundColor: COLORS.cardBg,
+    borderRadius: SIZES.radius + 4,
     padding: SIZES.padding * 1.5,
     marginHorizontal: SIZES.padding,
     marginBottom: SIZES.padding * 2,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 2,
+    elevation: 1,
   },
   verseHeader: {
     flexDirection: "row",
@@ -214,34 +221,36 @@ const styles = StyleSheet.create({
   },
   verseLabel: {
     fontSize: SIZES.small,
-    color: COLORS.secondary,
+    color: COLORS.primary,
     fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   refreshButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    backgroundColor: COLORS.secondary,
     justifyContent: "center",
     alignItems: "center",
   },
   verseReference: {
     fontSize: SIZES.medium,
-    color: COLORS.white,
+    color: COLORS.text,
     fontWeight: "600",
     marginBottom: 12,
   },
   verseText: {
-    fontSize: SIZES.medium,
-    color: COLORS.white,
-    lineHeight: 24,
+    fontSize: SIZES.medium + 1,
+    color: COLORS.text,
+    lineHeight: 26,
     marginBottom: 16,
   },
   meditateButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.primary,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -259,15 +268,17 @@ const styles = StyleSheet.create({
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cardBg,
     borderRadius: SIZES.radius,
     padding: SIZES.padding,
     marginBottom: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 2,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   iconContainer: {
     width: 56,
@@ -276,6 +287,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginRight: 16,
+    opacity: 0.15,
   },
   menuTextContainer: {
     flex: 1,
@@ -292,16 +304,18 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     flexDirection: "row",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cardBg,
     borderRadius: SIZES.radius,
     padding: SIZES.padding,
     marginHorizontal: SIZES.padding,
     marginBottom: SIZES.padding * 2,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 2,
+    elevation: 1,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   statItem: {
     flex: 1,
@@ -310,7 +324,7 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: SIZES.xlarge,
     fontWeight: "bold",
-    color: COLORS.primary,
+    color: COLORS.text,
     marginBottom: 4,
   },
   statLabel: {

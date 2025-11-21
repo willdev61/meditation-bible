@@ -1,15 +1,16 @@
 export const COLORS = {
-  primary: "#1E3A5F", // Bleu marine
-  secondary: "#D4AF37", // Or
-  accent: "#6B8E23", // Vert olive
-  background: "#F5F5F0", // Beige clair
-  text: "#2C3E50", // Gris foncé
-  textLight: "#7F8C8D", // Gris clair
+  primary: "#5B9BD5", // Bleu doux (accents et actions)
+  secondary: "#F8F9FA", // Gris très clair
+  accent: "#A8D5BA", // Vert menthe clair
+  background: "#FFFFFF", // Blanc pur
+  text: "#4A5568", // Gris moyen
+  textLight: "#A0AEC0", // Gris clair
   white: "#FFFFFF",
-  error: "#E74C3C",
-  success: "#27AE60",
-  cardBg: "#FFFFFF",
-  border: "#E0E0E0",
+  error: "#FC8181", // Rouge clair
+  success: "#68D391", // Vert clair
+  cardBg: "#FAFBFC", // Blanc cassé très subtil
+  border: "#E2E8F0", // Bordure gris très clair
+  shadow: "rgba(0, 0, 0, 0.03)", // Ombre très légère
 } as const
 
 export const FONTS = {
