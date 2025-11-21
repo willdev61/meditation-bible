@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "../types/navigation"
 import { COLORS, SIZES } from "../config/constants"
 import bibleJSONLoader, { BibleJSONVerse } from "../services/bible-json-loader"
+import readingPositionService from "../services/reading-position-service"
 
 type BibleChapterReaderScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -59,6 +60,14 @@ const BibleChapterReaderScreen: React.FC<BibleChapterReaderScreenProps> = ({
     () => bibleJSONLoader.getChapter(bookIndex, chapterNumber),
     [bookIndex, chapterNumber],
   )
+
+  // Sauvegarder la position de lecture
+  useEffect(() => {
+    const savePosition = async () => {
+      await readingPositionService.saveLastPosition(bookIndex, chapterNumber)
+    }
+    savePosition()
+  }, [bookIndex, chapterNumber])
 
   if (!bookInfo || !chapter) {
     return (
@@ -322,30 +331,46 @@ const BibleChapterReaderScreen: React.FC<BibleChapterReaderScreenProps> = ({
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: themeColors.background }]}
     >
-      {/* Header */}
+      {/* Header - YouVersion style */}
       <View style={[styles.header, { backgroundColor: themeColors.card }]}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.iconButton}
-        >
-          <Ionicons name="arrow-back" size={24} color={themeColors.text} />
-        </TouchableOpacity>
+        <View style={styles.headerTop}>
+          {/* Audio, Search, Emoji, Version */}
+          <View style={styles.headerIcons}>
+            <TouchableOpacity style={styles.headerIconButton}>
+              <Ionicons name="volume-medium" size={20} color={themeColors.text} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.headerIconButton}
+              onPress={() => navigation.navigate("Search")}
+            >
+              <Ionicons name="search" size={20} color={themeColors.text} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.headerIconButton}>
+              <Ionicons name="happy-outline" size={20} color={themeColors.text} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.headerIconButton}
+              onPress={() => setShowSettings(true)}
+            >
+              <Ionicons name="language" size={20} color={themeColors.text} />
+              <Text style={[styles.versionText, { color: themeColors.text }]}>PDV2017</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
+        {/* Book & Chapter Title */}
         <View style={styles.headerCenter}>
           <Text style={[styles.headerTitle, { color: themeColors.text }]}>
-            {bookInfo.name} {chapterNumber}
-          </Text>
-          <Text style={[styles.headerSubtitle, { color: themeColors.textLight }]}>
-            {chapter.Verses.length} versets
+            {bookInfo.name}
           </Text>
         </View>
 
-        <TouchableOpacity
-          onPress={() => setShowSettings(true)}
-          style={styles.iconButton}
-        >
-          <Ionicons name="settings-outline" size={24} color={themeColors.text} />
-        </TouchableOpacity>
+        {/* Chapter Number (Large) */}
+        <View style={styles.chapterNumberContainer}>
+          <Text style={[styles.chapterNumber, { color: themeColors.text }]}>
+            {chapterNumber}
+          </Text>
+        </View>
       </View>
 
       {/* Contenu du chapitre */}
@@ -358,58 +383,37 @@ const BibleChapterReaderScreen: React.FC<BibleChapterReaderScreenProps> = ({
           {chapter.Verses.map((verse, index) => renderVerse(verse, index))}
         </View>
 
-        {/* Navigation entre chapitres */}
-        <View style={styles.navigationContainer}>
+        {/* Navigation entre chapitres - YouVersion style */}
+        <View style={[styles.bottomNavBar, { backgroundColor: themeColors.card }]}>
           <TouchableOpacity
-            style={[
-              styles.navButton,
-              { backgroundColor: themeColors.card },
-              !canGoPrevious && styles.navButtonDisabled,
-            ]}
+            style={styles.navIconButton}
             onPress={handlePrevious}
             disabled={!canGoPrevious}
           >
             <Ionicons
-              name="chevron-back"
-              size={20}
+              name="play-back"
+              size={28}
               color={canGoPrevious ? themeColors.text : themeColors.textLight}
             />
-            <Text
-              style={[
-                styles.navButtonText,
-                {
-                  color: canGoPrevious
-                    ? themeColors.text
-                    : themeColors.textLight,
-                },
-              ]}
-            >
-              Précédent
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.navChapterButton}
+            onPress={() => navigation.navigate("BibleBooks")}
+          >
+            <Text style={[styles.navChapterText, { color: themeColors.text }]}>
+              {bookInfo.name} {chapterNumber}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[
-              styles.navButton,
-              { backgroundColor: themeColors.card },
-              !canGoNext && styles.navButtonDisabled,
-            ]}
+            style={styles.navIconButton}
             onPress={handleNext}
             disabled={!canGoNext}
           >
-            <Text
-              style={[
-                styles.navButtonText,
-                {
-                  color: canGoNext ? themeColors.text : themeColors.textLight,
-                },
-              ]}
-            >
-              Suivant
-            </Text>
             <Ionicons
-              name="chevron-forward"
-              size={20}
+              name="play-forward"
+              size={28}
               color={canGoNext ? themeColors.text : themeColors.textLight}
             />
           </TouchableOpacity>
@@ -427,29 +431,46 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
     paddingHorizontal: SIZES.padding,
-    paddingVertical: 12,
+    paddingTop: 12,
+    paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
-  iconButton: {
-    padding: 8,
-    width: 40,
+  headerTop: {
+    marginBottom: 12,
+  },
+  headerIcons: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: 12,
+  },
+  headerIconButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    padding: 4,
+  },
+  versionText: {
+    fontSize: 11,
+    fontWeight: "600",
   },
   headerCenter: {
-    flex: 1,
     alignItems: "center",
+    marginBottom: 8,
   },
   headerTitle: {
-    fontSize: SIZES.large,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontWeight: "600",
+    color: COLORS.textLight,
   },
-  headerSubtitle: {
-    fontSize: SIZES.small,
-    marginTop: 2,
+  chapterNumberContainer: {
+    alignItems: "center",
+  },
+  chapterNumber: {
+    fontSize: 72,
+    fontWeight: "bold",
   },
   container: {
     flex: 1,
@@ -474,27 +495,32 @@ const styles = StyleSheet.create({
   verseText: {
     flex: 1,
   },
-  navigationContainer: {
+  bottomNavBar: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 16,
+    paddingHorizontal: SIZES.padding * 2,
     marginTop: SIZES.padding,
     marginBottom: SIZES.padding * 2,
-    gap: 12,
+    marginHorizontal: SIZES.padding,
+    borderRadius: 24,
+    shadowColor: COLORS.text,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
-  navButton: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
+  navIconButton: {
+    padding: 8,
+  },
+  navChapterButton: {
+    paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 8,
-    gap: 4,
+    backgroundColor: COLORS.background,
+    borderRadius: 20,
   },
-  navButtonDisabled: {
-    opacity: 0.4,
-  },
-  navButtonText: {
+  navChapterText: {
     fontSize: SIZES.medium,
     fontWeight: "600",
   },
