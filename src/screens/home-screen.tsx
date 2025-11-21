@@ -6,9 +6,11 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ImageBackground,
 } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
+import { LinearGradient } from "expo-linear-gradient"
 import { CompositeNavigationProp } from "@react-navigation/native"
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
@@ -17,6 +19,7 @@ import { Verse } from "../types"
 import { COLORS, SIZES } from "../config/constants"
 import bibleService from "../services/bible-service"
 import LoadingSpinner from "../components/loading-spinner"
+import ImageCard from "../components/image-card"
 
 type HomeScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabParamList, "AccueilTab">,
@@ -25,6 +28,14 @@ type HomeScreenNavigationProp = CompositeNavigationProp<
 
 type HomeScreenProps = {
   navigation: HomeScreenNavigationProp
+}
+
+// 🖼️ Images inspirantes pour l'interface (remplacez par vos propres images)
+const INSPIRATIONAL_IMAGES = {
+  verseOfDay: "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=800&q=80", // Coucher de soleil montagne
+  prayer: "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=800&q=80", // Lac paisible
+  read: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80", // Montagnes
+  meditation: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80", // Forêt nature
 }
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
@@ -118,37 +129,37 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Verset du jour - Design amélioré */}
+        {/* Verset du jour - Nouveau design avec image */}
         {verseOfTheDay && (
-          <View style={styles.verseCard}>
-            <View style={styles.verseCardHeader}>
-              <View style={styles.verseTopBar}>
-                <View style={styles.verseLabelContainer}>
-                  <Ionicons name="sparkles" size={14} color={COLORS.gold} />
-                  <Text style={styles.verseLabel}>Verset du jour</Text>
-                </View>
-                <TouchableOpacity
-                  onPress={loadVerseOfTheDay}
-                  style={styles.refreshButton}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons name="refresh" size={18} color={COLORS.primary} />
-                </TouchableOpacity>
+          <View style={styles.verseSection}>
+            <View style={styles.verseSectionHeader}>
+              <View style={styles.verseLabelContainer}>
+                <Ionicons name="sparkles" size={16} color={COLORS.gold} />
+                <Text style={styles.verseLabel}>Verset du jour</Text>
               </View>
-              <Text style={styles.verseReference}>
-                {verseOfTheDay.reference}
-              </Text>
+              <TouchableOpacity
+                onPress={loadVerseOfTheDay}
+                style={styles.refreshButton}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="refresh" size={18} color={COLORS.primary} />
+              </TouchableOpacity>
             </View>
 
-            <View style={styles.verseQuoteContainer}>
-              <View style={styles.quoteMarkLeft}>
-                <Text style={styles.quoteMark}>"</Text>
-              </View>
-              <Text style={styles.verseText}>{verseOfTheDay.text}</Text>
-              <View style={styles.quoteMarkRight}>
-                <Text style={styles.quoteMark}>"</Text>
-              </View>
-            </View>
+            <ImageCard
+              imageUrl={INSPIRATIONAL_IMAGES.verseOfDay}
+              title={verseOfTheDay.text.length > 150
+                ? verseOfTheDay.text.substring(0, 150) + "..."
+                : verseOfTheDay.text}
+              subtitle={verseOfTheDay.reference}
+              height={280}
+              gradientColors={["rgba(0, 0, 0, 0.1)", "rgba(0, 0, 0, 0.7)"]}
+              onPress={() =>
+                navigation.navigate("Meditation", {
+                  verse: verseOfTheDay,
+                })
+              }
+            />
 
             <TouchableOpacity
               style={styles.meditateButton}
@@ -168,45 +179,33 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           </View>
         )}
 
-        {/* Menu principal - Design amélioré */}
+        {/* Menu principal - Cartes visuelles avec images */}
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Explorer</Text>
           <View style={styles.menuContainer}>
-            {menuItems.map((item, index) => (
-              <TouchableOpacity
-                key={item.id}
-                style={[
-                  styles.menuItem,
-                  { marginBottom: index === menuItems.length - 1 ? 0 : 12 },
-                ]}
-                onPress={item.onPress}
-                activeOpacity={0.7}
-              >
-                <View
-                  style={[
-                    styles.iconContainer,
-                    { backgroundColor: item.gradient[0] },
-                  ]}
-                >
-                  <Ionicons
-                    name={item.icon as any}
-                    size={28}
-                    color={item.iconColor}
-                  />
-                </View>
-                <View style={styles.menuTextContainer}>
-                  <Text style={styles.menuTitle}>{item.title}</Text>
-                  <Text style={styles.menuSubtitle}>{item.subtitle}</Text>
-                </View>
-                <View style={styles.chevronContainer}>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={20}
-                    color={COLORS.textLight}
-                  />
-                </View>
-              </TouchableOpacity>
-            ))}
+            <ImageCard
+              imageUrl={INSPIRATIONAL_IMAGES.read}
+              title="Lire la Bible"
+              description="Explorer les livres et chapitres"
+              icon="book"
+              height={160}
+              gradientColors={["rgba(0, 0, 0, 0.2)", "rgba(0, 0, 0, 0.6)"]}
+              onPress={() => navigation.navigate("BibleBooks")}
+              style={{ marginBottom: 16 }}
+            />
+            <ImageCard
+              imageUrl={INSPIRATIONAL_IMAGES.meditation}
+              title="Méditation guidée"
+              description="Approfondir un verset avec le timer"
+              icon="leaf"
+              height={160}
+              gradientColors={["rgba(0, 0, 0, 0.2)", "rgba(0, 0, 0, 0.6)"]}
+              onPress={() => {
+                if (verseOfTheDay) {
+                  navigation.navigate("Meditation", { verse: verseOfTheDay })
+                }
+              }}
+            />
           </View>
         </View>
 
@@ -304,6 +303,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.padding * 1.5,
     paddingTop: SIZES.padding,
     paddingBottom: SIZES.padding * 1.5,
+    backgroundColor: COLORS.background,
   },
   greeting: {
     fontSize: SIZES.title,
@@ -321,36 +321,23 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: COLORS.sand,
+    backgroundColor: COLORS.cream,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
     borderColor: COLORS.border,
   },
 
-  // Verset du jour
-  verseCard: {
-    backgroundColor: COLORS.paper,
-    borderRadius: SIZES.radius + 4,
-    padding: SIZES.padding * 1.5,
+  // Verset du jour - Nouveau design
+  verseSection: {
     marginHorizontal: SIZES.padding * 1.5,
     marginBottom: SIZES.padding * 2,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    shadowColor: COLORS.text,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
   },
-  verseCardHeader: {
-    marginBottom: SIZES.padding,
-  },
-  verseTopBar: {
+  verseSectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: SIZES.padding,
   },
   verseLabelContainer: {
     flexDirection: "row",
@@ -358,7 +345,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   verseLabel: {
-    fontSize: SIZES.small,
+    fontSize: SIZES.small + 1,
     color: COLORS.gold,
     fontWeight: "600",
     textTransform: "uppercase",
@@ -368,45 +355,11 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: COLORS.sand,
+    backgroundColor: COLORS.cream,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
     borderColor: COLORS.border,
-  },
-  verseReference: {
-    fontSize: SIZES.large,
-    color: COLORS.text,
-    fontWeight: "700",
-    letterSpacing: 0.5,
-  },
-  verseQuoteContainer: {
-    position: "relative",
-    paddingVertical: SIZES.padding * 0.5,
-    marginBottom: SIZES.padding,
-  },
-  quoteMarkLeft: {
-    position: "absolute",
-    top: -8,
-    left: -4,
-  },
-  quoteMarkRight: {
-    position: "absolute",
-    bottom: -20,
-    right: -4,
-  },
-  quoteMark: {
-    fontSize: 48,
-    color: COLORS.sand,
-    fontWeight: "700",
-    lineHeight: 48,
-  },
-  verseText: {
-    fontSize: SIZES.large,
-    color: COLORS.text,
-    lineHeight: 32,
-    paddingHorizontal: 12,
-    fontFamily: "System",
   },
   meditateButton: {
     flexDirection: "row",
@@ -417,11 +370,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: SIZES.radius,
     gap: 8,
+    marginTop: SIZES.padding,
     shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 4,
   },
   meditateButtonText: {
     color: COLORS.white,
@@ -443,59 +397,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 
-  // Menu principal
+  // Menu principal - Cartes visuelles
   menuContainer: {
     paddingHorizontal: SIZES.padding * 1.5,
-  },
-  menuItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: COLORS.paper,
-    borderRadius: SIZES.radius + 4,
-    padding: SIZES.padding,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    shadowColor: COLORS.text,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  iconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: SIZES.padding,
-    shadowColor: COLORS.text,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  menuTextContainer: {
-    flex: 1,
-  },
-  menuTitle: {
-    fontSize: SIZES.large,
-    fontWeight: "600",
-    color: COLORS.text,
-    marginBottom: 4,
-    letterSpacing: 0.3,
-  },
-  menuSubtitle: {
-    fontSize: SIZES.small + 1,
-    color: COLORS.textMedium,
-    lineHeight: 18,
-  },
-  chevronContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: COLORS.offWhite,
-    justifyContent: "center",
-    alignItems: "center",
   },
 
   // Accès rapide

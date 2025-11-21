@@ -8,8 +8,10 @@ import {
   SafeAreaView,
   TextInput,
   SectionList,
+  ImageBackground,
 } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
+import { LinearGradient } from "expo-linear-gradient"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RootStackParamList } from "../types/navigation"
 import { COLORS, SIZES } from "../config/constants"
@@ -17,6 +19,9 @@ import bibleJSONLoader, {
   BibleBookInfo,
   BookCategory,
 } from "../services/bible-json-loader"
+
+// Image de fond pour l'en-tête
+const HEADER_IMAGE = "https://images.unsplash.com/photo-1609429019995-8c40f49535a5?w=800&q=80" // Bible ouverte
 
 type BibleBooksScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, "BibleBooks">
@@ -177,18 +182,34 @@ const BibleBooksScreen: React.FC<BibleBooksScreenProps> = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <Ionicons name="arrow-back" size={24} color={COLORS.primary} />
-          </TouchableOpacity>
-          <Text style={styles.title}>Bible complète</Text>
-          <View style={styles.placeholder} />
-        </View>
+      {/* Header avec image de fond */}
+      <ImageBackground
+        source={{ uri: HEADER_IMAGE }}
+        style={styles.headerBackground}
+        imageStyle={styles.headerBackgroundImage}
+      >
+        <LinearGradient
+          colors={["rgba(0, 0, 0, 0.4)", "rgba(0, 0, 0, 0.7)"]}
+          style={styles.headerGradient}
+        >
+          <View style={styles.headerTop}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}
+            >
+              <Ionicons name="arrow-back" size={24} color={COLORS.white} />
+            </TouchableOpacity>
+            <View style={styles.headerTitleContainer}>
+              <Text style={styles.title}>Bible complète</Text>
+              <Text style={styles.subtitle}>66 livres · 1189 chapitres</Text>
+            </View>
+            <View style={styles.placeholder} />
+          </View>
+        </LinearGradient>
+      </ImageBackground>
 
+      {/* Barre de recherche et filtres */}
+      <View style={styles.searchSection}>
         {/* Barre de recherche */}
         <View style={styles.searchContainer}>
           <Ionicons
@@ -244,29 +265,62 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
-  header: {
-    backgroundColor: COLORS.white,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-    paddingBottom: SIZES.padding,
+  headerBackground: {
+    width: "100%",
+    height: 140,
+  },
+  headerBackgroundImage: {
+    resizeMode: "cover",
+  },
+  headerGradient: {
+    flex: 1,
+    justifyContent: "center",
   },
   headerTop: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: SIZES.padding,
-    paddingTop: SIZES.padding,
   },
   backButton: {
-    padding: 8,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.3)",
+  },
+  headerTitleContainer: {
+    flex: 1,
+    alignItems: "center",
   },
   title: {
     fontSize: SIZES.title,
     fontWeight: "bold",
-    color: COLORS.primary,
+    color: COLORS.white,
+    textShadowColor: "rgba(0, 0, 0, 0.3)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+  subtitle: {
+    fontSize: SIZES.small,
+    color: COLORS.white,
+    marginTop: 4,
+    opacity: 0.9,
+    textShadowColor: "rgba(0, 0, 0, 0.3)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   placeholder: {
     width: 40,
+  },
+  searchSection: {
+    backgroundColor: COLORS.white,
+    paddingBottom: SIZES.padding,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
   },
   searchContainer: {
     flexDirection: "row",
@@ -342,6 +396,11 @@ const styles = StyleSheet.create({
     marginVertical: 4,
     borderRadius: 12,
     overflow: "hidden",
+    shadowColor: COLORS.text,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   bookCardContent: {
     flexDirection: "row",
@@ -349,14 +408,16 @@ const styles = StyleSheet.create({
     padding: SIZES.padding,
   },
   bookIcon: {
-    fontSize: 28,
-    marginRight: 12,
+    fontSize: 32,
+    marginRight: 16,
+    width: 40,
+    textAlign: "center",
   },
   bookInfo: {
     flex: 1,
   },
   bookName: {
-    fontSize: SIZES.medium,
+    fontSize: SIZES.medium + 1,
     fontWeight: "600",
     color: COLORS.text,
     marginBottom: 4,
