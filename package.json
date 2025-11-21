@@ -15,6 +15,7 @@
     "@react-navigation/native": "^7.1.21",
     "@react-navigation/native-stack": "^7.6.4",
     "expo": "~54.0.25",
+    "expo-linear-gradient": "~14.0.1",
     "expo-sqlite": "^16.0.9",
     "expo-status-bar": "~3.0.8",
     "react": "19.1.0",
@@ -26,6 +27,5 @@
     "@types/react": "~19.1.0",
     "typescript": "~5.9.2"
   },
-  "private": true,
-  "packageManager": "yarn@4.7.0+sha512.5a0afa1d4c1d844b3447ee3319633797bcd6385d9a44be07993ae52ff4facabccafb4af5dcd1c2f9a94ac113e5e9ff56f6130431905884414229e284e37bb7c9"
+  "private": true
 }
