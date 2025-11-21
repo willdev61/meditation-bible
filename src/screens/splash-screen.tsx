@@ -86,8 +86,8 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1A365D",
-    // background: "linear-gradient(180deg, #1A365D 0%, #2C5282 100%)",
+    backgroundColor: COLORS.primary,
+    // background: "linear-gradient(180deg, #1E3A5F 0%, #2C5282 100%)",
   },
   content: {
     flex: 1,

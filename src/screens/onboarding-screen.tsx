@@ -27,7 +27,7 @@ const slides: OnboardingSlide[] = [
     description:
       "Explorez chaque verset avec sa signification originale en hébreu et grec grâce à la concordance Strong's.",
     icon: "📖",
-    backgroundColor: "#FFFAF0",
+    backgroundColor: "#F5F1E8", // Parchemin ancien
   },
   {
     id: "2",
@@ -35,7 +35,7 @@ const slides: OnboardingSlide[] = [
     description:
       "Des outils de méditation guidée, un journal spirituel et des questions de réflexion pour transformer votre lecture.",
     icon: "🙏",
-    backgroundColor: "#F0F8FF",
+    backgroundColor: "#E8DCC8", // Parchemin clair
   },
   {
     id: "3",
@@ -43,7 +43,7 @@ const slides: OnboardingSlide[] = [
     description:
       "Suivez votre progression, créez des plans de lecture et construisez une habitude spirituelle durable.",
     icon: "🌱",
-    backgroundColor: "#F0FFF4",
+    backgroundColor: "#FDFBF7", // Crème parchemin
   },
 ]
 
