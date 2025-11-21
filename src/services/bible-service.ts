@@ -124,6 +124,27 @@ class BibleService {
     }
   }
 
+  async getRandomVerse(): Promise<Verse | null> {
+    try {
+      switch (this.dataSource) {
+        case DataSource.SQLITE:
+          return await Database.getRandomVerse()
+
+        case DataSource.MOCK:
+          // Pour mock, retourner un verset aléatoire parmi ceux disponibles
+          const verses = Object.values((await import("../data/bible-mock")).mockBible.verses) as Verse[]
+          if (verses.length === 0) return null
+          return verses[Math.floor(Math.random() * verses.length)]
+
+        default:
+          return await Database.getRandomVerse()
+      }
+    } catch (error) {
+      console.error("Error getting random verse:", error)
+      return null
+    }
+  }
+
   // Méthodes à implémenter plus tard
   private async fetchFromLueur(
     book: string,

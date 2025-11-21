@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import {
   View,
   Text,
@@ -8,17 +8,43 @@ import {
   SafeAreaView,
 } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
+import { CompositeNavigationProp } from "@react-navigation/native"
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { RootStackParamList } from "../types/navigation"
+import { RootStackParamList, TabParamList } from "../types/navigation"
+import { Verse } from "../types"
 import { COLORS, SIZES } from "../config/constants"
-import { getVerse } from "../data/bible-mock"
+import bibleService from "../services/bible-service"
+import LoadingSpinner from "../components/loading-spinner"
+
+type HomeScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabParamList, "AccueilTab">,
+  NativeStackNavigationProp<RootStackParamList>
+>
 
 type HomeScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, "Home">
+  navigation: HomeScreenNavigationProp
 }
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
-  const verseOfTheDay = getVerse("jean", 3, 16)
+  const [verseOfTheDay, setVerseOfTheDay] = useState<Verse | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    loadVerseOfTheDay()
+  }, [])
+
+  const loadVerseOfTheDay = async () => {
+    setLoading(true)
+    try {
+      const randomVerse = await bibleService.getRandomVerse()
+      setVerseOfTheDay(randomVerse)
+    } catch (error) {
+      console.error("Error loading verse of the day:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const menuItems = [
     {
@@ -55,6 +81,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     },
   ]
 
+  if (loading) {
+    return <LoadingSpinner />
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>
@@ -67,7 +97,15 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         {/* Verset du jour */}
         {verseOfTheDay && (
           <View style={styles.verseCard}>
-            <Text style={styles.verseLabel}>Verset du jour</Text>
+            <View style={styles.verseHeader}>
+              <Text style={styles.verseLabel}>Verset du jour</Text>
+              <TouchableOpacity
+                onPress={loadVerseOfTheDay}
+                style={styles.refreshButton}
+              >
+                <Ionicons name="refresh" size={20} color={COLORS.secondary} />
+              </TouchableOpacity>
+            </View>
             <Text style={styles.verseReference}>{verseOfTheDay.reference}</Text>
             <Text style={styles.verseText}>{verseOfTheDay.text}</Text>
             <TouchableOpacity
@@ -168,11 +206,24 @@ const styles = StyleSheet.create({
     marginHorizontal: SIZES.padding,
     marginBottom: SIZES.padding * 2,
   },
+  verseHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
   verseLabel: {
     fontSize: SIZES.small,
     color: COLORS.secondary,
     fontWeight: "600",
-    marginBottom: 8,
+  },
+  refreshButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   verseReference: {
     fontSize: SIZES.medium,

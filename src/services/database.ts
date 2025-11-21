@@ -452,3 +452,45 @@ export const getDatabaseStats = async (): Promise<{
     strongsCount,
   }
 }
+
+// Récupérer un verset aléatoire
+export const getRandomVerse = async (): Promise<Verse | null> => {
+  const db = await openDatabase()
+
+  // Récupérer un verset aléatoire
+  const verseRow = await db.getFirstAsync<{
+    id: number
+    book: string
+    chapter: number
+    verse: number
+    text: string
+    reference: string
+  }>('SELECT * FROM verses ORDER BY RANDOM() LIMIT 1')
+
+  if (!verseRow) return null
+
+  // Récupérer les mots associés
+  const wordRows = await db.getAllAsync<{
+    text: string
+    strong: string | null
+    position: number | null
+  }>(
+    'SELECT text, strong, position FROM words WHERE verse_id = ? ORDER BY position',
+    verseRow.id
+  )
+
+  const words: Word[] = wordRows.map((w) => ({
+    text: w.text,
+    strong: w.strong,
+    position: w.position ?? undefined,
+  }))
+
+  return {
+    book: verseRow.book,
+    chapter: verseRow.chapter,
+    verse: verseRow.verse,
+    text: verseRow.text,
+    reference: verseRow.reference,
+    words,
+  }
+}
