@@ -16,6 +16,9 @@ import BibleReaderScreen from "../screens/bible-reader-screen"
 import StrongDetailScreen from "../screens/strong-detail-screen"
 import MeditationScreen from "../screens/meditation-screen"
 import SearchScreen from "../screens/search-screen"
+import BibleBooksScreen from "../screens/bible-books-screen"
+import BibleChaptersListScreen from "../screens/bible-chapters-list-screen"
+import BibleChapterReaderScreen from "../screens/bible-chapter-reader-screen"
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<TabParamList>()
@@ -94,6 +97,15 @@ const AppNavigator: React.FC = () => {
         <Stack.Screen name="StrongDetail" component={StrongDetailScreen} />
         <Stack.Screen name="Meditation" component={MeditationScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen name="BibleBooks" component={BibleBooksScreen} />
+        <Stack.Screen
+          name="BibleChaptersList"
+          component={BibleChaptersListScreen}
+        />
+        <Stack.Screen
+          name="BibleChapterReader"
+          component={BibleChapterReaderScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )

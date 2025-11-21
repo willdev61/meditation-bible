@@ -108,9 +108,57 @@ const BibleScreen: React.FC<BibleScreenProps> = ({ navigation }) => {
         >
           <Ionicons name="search" size={24} color={COLORS.textLight} />
         </TouchableOpacity>
+        <View style={styles.headerActions}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("BibleBooks")}
+            style={styles.actionButton}
+          >
+            <Ionicons name="book" size={24} color={COLORS.primary} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Search")}
+            style={styles.searchButton}
+          >
+            <Ionicons name="search" size={24} color={COLORS.primary} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView style={styles.container}>
+        <View style={styles.featuredSection}>
+          <TouchableOpacity
+            style={styles.fullBibleCard}
+            onPress={() => navigation.navigate("BibleBooks")}
+            activeOpacity={0.8}
+          >
+            <View style={styles.fullBibleIconContainer}>
+              <Ionicons name="book" size={40} color={COLORS.white} />
+            </View>
+            <View style={styles.fullBibleContent}>
+              <Text style={styles.fullBibleTitle}>Bible complète</Text>
+              <Text style={styles.fullBibleDescription}>
+                Explorez les 66 livres de la Bible par catégorie
+              </Text>
+              <View style={styles.fullBibleStats}>
+                <View style={styles.statItem}>
+                  <Text style={styles.statNumber}>39</Text>
+                  <Text style={styles.statLabel}>AT</Text>
+                </View>
+                <View style={styles.statDivider} />
+                <View style={styles.statItem}>
+                  <Text style={styles.statNumber}>27</Text>
+                  <Text style={styles.statLabel}>NT</Text>
+                </View>
+              </View>
+            </View>
+            <Ionicons
+              name="chevron-forward"
+              size={24}
+              color={COLORS.textLight}
+            />
+          </TouchableOpacity>
+        </View>
+
         {renderBooksByTestament("AT")}
         {renderBooksByTestament("NT")}
       </ScrollView>
@@ -138,6 +186,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: COLORS.text,
   },
+  headerActions: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  actionButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.background,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   searchButton: {
     width: 40,
     height: 40,
@@ -145,6 +205,69 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.secondary,
     justifyContent: "center",
     alignItems: "center",
+  },
+  featuredSection: {
+    padding: SIZES.padding,
+  },
+  fullBibleCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORS.white,
+    borderRadius: SIZES.radius,
+    padding: SIZES.padding,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+    marginBottom: SIZES.padding,
+  },
+  fullBibleIconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: COLORS.primary,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
+  },
+  fullBibleContent: {
+    flex: 1,
+  },
+  fullBibleTitle: {
+    fontSize: SIZES.large,
+    fontWeight: "bold",
+    color: COLORS.text,
+    marginBottom: 4,
+  },
+  fullBibleDescription: {
+    fontSize: SIZES.small,
+    color: COLORS.textLight,
+    marginBottom: 8,
+  },
+  fullBibleStats: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  statItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  statNumber: {
+    fontSize: SIZES.medium,
+    fontWeight: "bold",
+    color: COLORS.primary,
+  },
+  statLabel: {
+    fontSize: SIZES.small,
+    color: COLORS.textLight,
+  },
+  statDivider: {
+    width: 1,
+    height: 16,
+    backgroundColor: COLORS.border,
+    marginHorizontal: 12,
   },
   container: {
     flex: 1,
