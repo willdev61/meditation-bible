@@ -19,6 +19,11 @@ import MeditationScreen from "../screens/meditation-screen"
 import BibleBooksScreen from "../screens/bible-books-screen"
 import BibleChaptersListScreen from "../screens/bible-chapters-list-screen"
 import BibleChapterReaderScreen from "../screens/bible-chapter-reader-screen"
+import FavoritesScreen from "../screens/favorites-screen"
+import StatsScreen from "../screens/stats-screen"
+import ReadingPlansScreen from "../screens/reading-plans-screen"
+import ReadingPlanDetailScreen from "../screens/reading-plan-detail-screen"
+import OptionsScreen from "../screens/options-screen"
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<TabParamList>()
@@ -113,6 +118,14 @@ const AppNavigator: React.FC = () => {
           name="BibleChapterReader"
           component={BibleChapterReaderScreen}
         />
+        <Stack.Screen name="Favorites" component={FavoritesScreen} />
+        <Stack.Screen name="Stats" component={StatsScreen} />
+        <Stack.Screen name="ReadingPlans" component={ReadingPlansScreen} />
+        <Stack.Screen
+          name="ReadingPlanDetail"
+          component={ReadingPlanDetailScreen}
+        />
+        <Stack.Screen name="Options" component={OptionsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )

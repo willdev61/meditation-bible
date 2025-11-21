@@ -101,6 +101,100 @@ export const initializeDatabase = async (): Promise<void> => {
     ON strongs(testament);
   `)
 
+  // Table des favoris
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS favorites (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      book TEXT NOT NULL,
+      chapter INTEGER NOT NULL,
+      verse INTEGER NOT NULL,
+      verse_text TEXT NOT NULL,
+      reference TEXT NOT NULL,
+      note TEXT,
+      created_at TEXT NOT NULL,
+      UNIQUE(book, chapter, verse)
+    );
+  `)
+
+  // Table des surlignages
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS highlights (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      book TEXT NOT NULL,
+      chapter INTEGER NOT NULL,
+      verse INTEGER NOT NULL,
+      color TEXT NOT NULL CHECK(color IN ('yellow', 'green', 'blue')),
+      created_at TEXT NOT NULL,
+      UNIQUE(book, chapter, verse)
+    );
+  `)
+
+  // Table des statistiques de lecture
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS reading_stats (
+      id INTEGER PRIMARY KEY CHECK(id = 1),
+      total_chapters_read INTEGER DEFAULT 0,
+      total_verses_read INTEGER DEFAULT 0,
+      current_streak INTEGER DEFAULT 0,
+      longest_streak INTEGER DEFAULT 0,
+      last_read_date TEXT,
+      chapters_read_today INTEGER DEFAULT 0,
+      total_reading_time_minutes INTEGER DEFAULT 0
+    );
+  `)
+
+  // Insérer les stats initiales
+  await db.execAsync(`
+    INSERT OR IGNORE INTO reading_stats (id) VALUES (1);
+  `)
+
+  // Table des plans de lecture
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS reading_plans (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      description TEXT NOT NULL,
+      total_days INTEGER NOT NULL,
+      current_day INTEGER DEFAULT 0,
+      start_date TEXT,
+      completed INTEGER DEFAULT 0
+    );
+  `)
+
+  // Table des jours de plans de lecture
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS reading_plan_days (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      plan_id TEXT NOT NULL,
+      day INTEGER NOT NULL,
+      book TEXT NOT NULL,
+      start_chapter INTEGER NOT NULL,
+      end_chapter INTEGER NOT NULL,
+      completed INTEGER DEFAULT 0,
+      FOREIGN KEY (plan_id) REFERENCES reading_plans(id) ON DELETE CASCADE
+    );
+  `)
+
+  // Table des paramètres utilisateur
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS user_settings (
+      id INTEGER PRIMARY KEY CHECK(id = 1),
+      font_size INTEGER DEFAULT 16,
+      line_height REAL DEFAULT 1.8,
+      theme TEXT DEFAULT 'light' CHECK(theme IN ('light', 'dark', 'sepia')),
+      show_verse_numbers INTEGER DEFAULT 1,
+      show_strong_numbers INTEGER DEFAULT 1,
+      auto_play_audio INTEGER DEFAULT 0,
+      notifications_enabled INTEGER DEFAULT 1,
+      daily_reminder_time TEXT
+    );
+  `)
+
+  // Insérer les paramètres par défaut
+  await db.execAsync(`
+    INSERT OR IGNORE INTO user_settings (id) VALUES (1);
+  `)
+
   console.log('✅ Base de données initialisée avec succès')
 }
 
@@ -117,6 +211,12 @@ export const isDatabaseSeeded = async (): Promise<boolean> => {
 export const resetDatabase = async (): Promise<void> => {
   const db = await openDatabase()
 
+  await db.execAsync('DROP TABLE IF EXISTS reading_plan_days;')
+  await db.execAsync('DROP TABLE IF EXISTS reading_plans;')
+  await db.execAsync('DROP TABLE IF EXISTS highlights;')
+  await db.execAsync('DROP TABLE IF EXISTS favorites;')
+  await db.execAsync('DROP TABLE IF EXISTS reading_stats;')
+  await db.execAsync('DROP TABLE IF EXISTS user_settings;')
   await db.execAsync('DROP TABLE IF EXISTS words;')
   await db.execAsync('DROP TABLE IF EXISTS verses;')
   await db.execAsync('DROP TABLE IF EXISTS strongs;')

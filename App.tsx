@@ -5,6 +5,7 @@ import AppNavigator from "./src/navigation/navigator"
 import { COLORS } from "./src/config/constants"
 import { initializeDatabase } from "./src/services/database"
 import { seedDatabase } from "./src/services/seed-database"
+import readingPlansService from "./src/services/reading-plans-service"
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -20,6 +21,9 @@ export default function App() {
 
         // Peupler la base de données avec les données initiales
         await seedDatabase()
+
+        // Initialiser les plans de lecture par défaut
+        await readingPlansService.initializeDefaultPlans()
 
         console.log('✅ Application prête!')
         setIsLoading(false)
