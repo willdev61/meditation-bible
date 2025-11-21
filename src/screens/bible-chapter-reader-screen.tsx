@@ -331,7 +331,7 @@ const BibleChapterReaderScreen: React.FC<BibleChapterReaderScreenProps> = ({
     <SafeAreaView
       style={[styles.safeArea, { backgroundColor: themeColors.background }]}
     >
-      {/* Header - YouVersion style */}
+      {/* Header - YouVersion style - Fixed/Sticky */}
       <View style={[styles.header, { backgroundColor: themeColors.card }]}>
         <View style={styles.headerTop}>
           {/* Audio, Search, Emoji, Version */}
@@ -358,19 +358,16 @@ const BibleChapterReaderScreen: React.FC<BibleChapterReaderScreenProps> = ({
           </View>
         </View>
 
-        {/* Book & Chapter Title */}
-        <View style={styles.headerCenter}>
+        {/* Book & Chapter Selector */}
+        <TouchableOpacity
+          style={styles.headerCenter}
+          onPress={() => navigation.navigate("BibleBooks")}
+        >
           <Text style={[styles.headerTitle, { color: themeColors.text }]}>
-            {bookInfo.name}
+            {bookInfo.name} {chapterNumber}
           </Text>
-        </View>
-
-        {/* Chapter Number (Large) */}
-        <View style={styles.chapterNumberContainer}>
-          <Text style={[styles.chapterNumber, { color: themeColors.text }]}>
-            {chapterNumber}
-          </Text>
-        </View>
+          <Ionicons name="chevron-down" size={16} color={themeColors.textLight} />
+        </TouchableOpacity>
       </View>
 
       {/* Contenu du chapitre */}
@@ -380,6 +377,10 @@ const BibleChapterReaderScreen: React.FC<BibleChapterReaderScreenProps> = ({
         showsVerticalScrollIndicator={false}
       >
         <View style={[styles.chapterCard, { backgroundColor: themeColors.card }]}>
+          {/* Chapter Number at the start of verses */}
+          <Text style={[styles.chapterNumberInline, { color: themeColors.text }]}>
+            {chapterNumber}
+          </Text>
           {chapter.Verses.map((verse, index) => renderVerse(verse, index))}
         </View>
 
@@ -433,9 +434,14 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: SIZES.padding,
     paddingTop: 12,
-    paddingBottom: 16,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
+    shadowColor: COLORS.text,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 3,
   },
   headerTop: {
     marginBottom: 12,
@@ -457,20 +463,22 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   headerCenter: {
+    flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8,
+    justifyContent: "center",
+    gap: 4,
+    paddingVertical: 8,
   },
   headerTitle: {
     fontSize: 16,
     fontWeight: "600",
     color: COLORS.textLight,
   },
-  chapterNumberContainer: {
-    alignItems: "center",
-  },
-  chapterNumber: {
-    fontSize: 72,
+  chapterNumberInline: {
+    fontSize: 48,
     fontWeight: "bold",
+    marginBottom: 16,
+    marginLeft: -4,
   },
   container: {
     flex: 1,
