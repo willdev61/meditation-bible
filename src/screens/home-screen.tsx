@@ -125,7 +125,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             <Text style={styles.tagline}>Pause. Médite. Transforme.</Text>
           </View>
           <View style={styles.decorativeIcon}>
-            <Ionicons name="leaf" size={28} color={COLORS.primary} />
+            <Ionicons name="leaf" size={22} color={COLORS.primary} />
           </View>
         </View>
 
@@ -238,7 +238,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
                 <View style={styles.quickAccessIcon}>
                   <Ionicons
                     name={item.icon as any}
-                    size={24}
+                    size={20}
                     color={COLORS.primary}
                   />
                 </View>
@@ -257,7 +257,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
               <View style={styles.statIconContainer}>
-                <Ionicons name="flame" size={20} color={COLORS.gold} />
+                <Ionicons name="flame" size={18} color={COLORS.gold} />
               </View>
               <Text style={styles.statNumber}>0</Text>
               <Text style={styles.statLabel}>Jours de suite</Text>
@@ -265,7 +265,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
               <View style={styles.statIconContainer}>
-                <Ionicons name="book" size={20} color={COLORS.primary} />
+                <Ionicons name="book" size={18} color={COLORS.primary} />
               </View>
               <Text style={styles.statNumber}>0</Text>
               <Text style={styles.statLabel}>Versets lus</Text>
@@ -273,7 +273,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             <View style={styles.statDivider} />
             <View style={styles.statItem}>
               <View style={styles.statIconContainer}>
-                <Ionicons name="time" size={20} color={COLORS.olive} />
+                <Ionicons name="time" size={18} color={COLORS.olive} />
               </View>
               <Text style={styles.statNumber}>0</Text>
               <Text style={styles.statLabel}>Minutes</Text>
@@ -318,9 +318,9 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
   decorativeIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: COLORS.cream,
     justifyContent: "center",
     alignItems: "center",
@@ -421,9 +421,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   quickAccessIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: COLORS.sand,
     justifyContent: "center",
     alignItems: "center",
@@ -464,9 +464,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   statIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: COLORS.sand,
     justifyContent: "center",
     alignItems: "center",
