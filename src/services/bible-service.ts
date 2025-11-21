@@ -10,6 +10,7 @@ import {
   getStrongDefinition as getMockStrong,
   searchStrongs as searchMockStrongs,
 } from "../data/strong-mock"
+import * as Database from "./database"
 
 class BibleService {
   private dataSource: DataSource
@@ -25,6 +26,9 @@ class BibleService {
   ): Promise<Verse | null> {
     try {
       switch (this.dataSource) {
+        case DataSource.SQLITE:
+          return await Database.getVerse(book, chapter, verse)
+
         case DataSource.MOCK:
           return getMockVerse(book, chapter, verse)
 
@@ -35,7 +39,7 @@ class BibleService {
           return await this.fetchFromOpenSource(book, chapter, verse)
 
         default:
-          return getMockVerse(book, chapter, verse)
+          return await Database.getVerse(book, chapter, verse)
       }
     } catch (error) {
       console.error("Error fetching verse:", error)
@@ -46,6 +50,9 @@ class BibleService {
   async getStrongDefinition(number: string): Promise<StrongDefinition | null> {
     try {
       switch (this.dataSource) {
+        case DataSource.SQLITE:
+          return await Database.getStrongDefinition(number)
+
         case DataSource.MOCK:
           return getMockStrong(number)
 
@@ -53,7 +60,7 @@ class BibleService {
           return await this.fetchStrongFromLueur(number)
 
         default:
-          return getMockStrong(number)
+          return await Database.getStrongDefinition(number)
       }
     } catch (error) {
       console.error("Error fetching Strong definition:", error)
@@ -64,11 +71,16 @@ class BibleService {
   async getBook(bookId: string): Promise<Book | undefined> {
     try {
       switch (this.dataSource) {
+        case DataSource.SQLITE:
+          const book = await Database.getBook(bookId)
+          return book ?? undefined
+
         case DataSource.MOCK:
           return getMockBook(bookId)
 
         default:
-          return getMockBook(bookId)
+          const defaultBook = await Database.getBook(bookId)
+          return defaultBook ?? undefined
       }
     } catch (error) {
       console.error("Error fetching book:", error)
@@ -79,11 +91,14 @@ class BibleService {
   async getAllBooks(): Promise<Book[]> {
     try {
       switch (this.dataSource) {
+        case DataSource.SQLITE:
+          return await Database.getAllBooks()
+
         case DataSource.MOCK:
           return getMockAllBooks()
 
         default:
-          return getMockAllBooks()
+          return await Database.getAllBooks()
       }
     } catch (error) {
       console.error("Error fetching books:", error)
@@ -94,15 +109,39 @@ class BibleService {
   async searchStrongs(query: string): Promise<StrongDefinition[]> {
     try {
       switch (this.dataSource) {
+        case DataSource.SQLITE:
+          return await Database.searchStrongDefinitions(query)
+
         case DataSource.MOCK:
           return searchMockStrongs(query)
 
         default:
-          return searchMockStrongs(query)
+          return await Database.searchStrongDefinitions(query)
       }
     } catch (error) {
       console.error("Error searching Strongs:", error)
       return []
+    }
+  }
+
+  async getRandomVerse(): Promise<Verse | null> {
+    try {
+      switch (this.dataSource) {
+        case DataSource.SQLITE:
+          return await Database.getRandomVerse()
+
+        case DataSource.MOCK:
+          // Pour mock, retourner un verset aléatoire parmi ceux disponibles
+          const verses = Object.values((await import("../data/bible-mock")).mockBible.verses) as Verse[]
+          if (verses.length === 0) return null
+          return verses[Math.floor(Math.random() * verses.length)]
+
+        default:
+          return await Database.getRandomVerse()
+      }
+    } catch (error) {
+      console.error("Error getting random verse:", error)
+      return null
     }
   }
 

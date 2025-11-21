@@ -64,12 +64,12 @@ const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
     if (currentIndex < slides.length - 1) {
       slidesRef.current?.scrollToIndex({ index: currentIndex + 1 })
     } else {
-      navigation.replace("Home")
+      navigation.replace("MainTabs")
     }
   }
 
   const skip = () => {
-    navigation.replace("Home")
+    navigation.replace("MainTabs")
   }
 
   const renderSlide = ({ item }: { item: OnboardingSlide }) => (

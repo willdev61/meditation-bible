@@ -2,10 +2,18 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { RouteProp } from "@react-navigation/native"
 import { Verse } from "."
 
+// Bottom Tab Navigator
+export type TabParamList = {
+  AccueilTab: undefined
+  BibleTab: undefined
+  MeditationTab: undefined
+}
+
+// Root Stack Navigator
 export type RootStackParamList = {
   Splash: undefined
   Onboarding: undefined
-  Home: undefined
+  MainTabs: undefined
   BibleReader: {
     book: string
     chapter: number
@@ -19,11 +27,7 @@ export type RootStackParamList = {
   }
   Search: undefined
 }
-// Navigation props
-export type HomeScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "Home"
->
+// Navigation props for stack screens
 export type BibleReaderNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "BibleReader"
