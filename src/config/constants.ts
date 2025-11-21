@@ -30,11 +30,12 @@ export const SIZES = {
 
 export enum DataSource {
   MOCK = "mock",
+  SQLITE = "sqlite",
   LUEUR = "lueur",
   OPENSOURCE = "opensource",
 }
 
-export const CURRENT_DATA_SOURCE: DataSource = DataSource.MOCK
+export const CURRENT_DATA_SOURCE: DataSource = DataSource.SQLITE
 
 export const APP_CONFIG = {
   name: "Méditation Bible",
