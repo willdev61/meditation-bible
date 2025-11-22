@@ -251,33 +251,57 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           </ScrollView>
         </View>
 
-        {/* Statistiques - Design amélioré */}
+        {/* Fonctionnalités */}
         <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Votre parcours</Text>
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <View style={styles.statIconContainer}>
-                <Ionicons name="flame" size={18} color={COLORS.gold} />
+          <Text style={styles.sectionTitle}>Outils</Text>
+          <View style={styles.featuresContainer}>
+            <TouchableOpacity
+              style={styles.featureCard}
+              onPress={() => navigation.navigate("Favorites")}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.featureIcon, { backgroundColor: "#FFE5E5" }]}>
+                <Ionicons name="heart" size={24} color="#E74C3C" />
               </View>
-              <Text style={styles.statNumber}>0</Text>
-              <Text style={styles.statLabel}>Jours de suite</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <View style={styles.statIconContainer}>
-                <Ionicons name="book" size={18} color={COLORS.primary} />
+              <Text style={styles.featureTitle}>Favoris</Text>
+              <Text style={styles.featureDesc}>Versets sauvegardés</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.featureCard}
+              onPress={() => navigation.navigate("Stats")}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.featureIcon, { backgroundColor: "#E3F2FD" }]}>
+                <Ionicons name="stats-chart" size={24} color="#2196F3" />
               </View>
-              <Text style={styles.statNumber}>0</Text>
-              <Text style={styles.statLabel}>Versets lus</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <View style={styles.statIconContainer}>
-                <Ionicons name="time" size={18} color={COLORS.olive} />
+              <Text style={styles.featureTitle}>Stats</Text>
+              <Text style={styles.featureDesc}>Progression visible</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.featureCard}
+              onPress={() => navigation.navigate("ReadingPlans")}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.featureIcon, { backgroundColor: "#F3E5F5" }]}>
+                <Ionicons name="map" size={24} color="#9C27B0" />
               </View>
-              <Text style={styles.statNumber}>0</Text>
-              <Text style={styles.statLabel}>Minutes</Text>
-            </View>
+              <Text style={styles.featureTitle}>Plans</Text>
+              <Text style={styles.featureDesc}>Lecture guidée</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.featureCard}
+              onPress={() => navigation.navigate("Options")}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.featureIcon, { backgroundColor: "#E8F5E9" }]}>
+                <Ionicons name="settings" size={24} color="#4CAF50" />
+              </View>
+              <Text style={styles.featureTitle}>Options</Text>
+              <Text style={styles.featureDesc}>Personnaliser</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -491,6 +515,47 @@ const styles = StyleSheet.create({
     width: 1,
     backgroundColor: COLORS.border,
     marginHorizontal: SIZES.padding,
+  },
+
+  // Features Grid
+  featuresContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    paddingHorizontal: SIZES.padding * 1.5,
+    gap: 12,
+  },
+  featureCard: {
+    width: "48%",
+    backgroundColor: COLORS.paper,
+    borderRadius: SIZES.radius,
+    padding: SIZES.padding,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    shadowColor: COLORS.text,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  featureIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  featureTitle: {
+    fontSize: SIZES.medium,
+    fontWeight: "600",
+    color: COLORS.text,
+    marginBottom: 4,
+  },
+  featureDesc: {
+    fontSize: SIZES.small,
+    color: COLORS.textLight,
+    textAlign: "center",
   },
 })
 
